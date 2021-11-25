@@ -1,42 +1,89 @@
-
-const Sauces = require('../models/sauces');
+const Sauces = require('../models/Sauces');
 
 
 exports.createSauces = (req, res, next) => {
-    console.log(req.body);
-    res.status(201).json({
-      message: 'Objet créé !'
-    });
-}
+    const saucesObject = JSON.parse(req.body.sauces); //parse le nouvel objet 
+    delete saucesObject._id;
+      const sauces = new Sauces({ //nouvelle sauce construite avec le nouvel objet dans le corps de la requete
+        ...saucesObject,
+   
+  });
+  sauces.save()
+      .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
+      .catch(error => res.status(400).json({ error }));
+};
 
 exports.modifySauces = (req, res, next) => {
-    const sauces = [
-      {
-        userId: 'oeihfzeoi',
-        name: 'Mon premier objet',
-        manufacturer : 'fabricant de la sauce',
-        description: 'Les infos de mon premier objet',
-        mainPepper : 'String — le principal ingrédient épicé de la sauce' ,
-        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-        heat : 'Number — nombre entre 1 et 10 décrivant la sauce' ,
-        likes : 'Number — nombre d utilisateurs qui aiment (= likent) la sauce',
-        dislikes : 'Number — nombre d utilisateurs qui n aiment pas (= dislike) la sauce',
-        usersLiked :'tableau des identifiants des utilisateurs qui ont aimé la sauce',
-        usersDisliked : 'tableau des identifiants des utilisateurs qui n ont pas aimé la sauce' ,
-      },
-      {
-        userId: 'oeihfzeoi',
-        name: 'Mon premier objet',
-        manufacturer : 'fabricant de la sauce',
-        description: 'Les infos de mon premier objet',
-        mainPepper : 'String — le principal ingrédient épicé de la sauce' ,
-        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-        heat : 'Number — nombre entre 1 et 10 décrivant la sauce' ,
-        likes : 'Number — nombre d utilisateurs qui aiment (= likent) la sauce',
-        dislikes : 'Number — nombre d utilisateurs qui n aiment pas (= dislike) la sauce',
-        usersLiked :'tableau des identifiants des utilisateurs qui ont aimé la sauce',
-        usersDisliked : 'tableau des identifiants des utilisateurs qui n ont pas aimé la sauce' ,
-      },
-    ];
-    res.status(200).json(sauces);
-  }
+  const sauces = new Sauces({
+    userId: req.body.userId,
+    name: req.body.name,
+    manufacturer: req.body.manufacturer,
+    description: req.body.description,
+    manufacturer: req.body.manufacturer,
+    mainPepper: req.body.mainPepper,
+    imageUrl: req.body.imageUrl,
+    heat: req.body.heat,
+    price: req.body.price
+  });
+  Sauces.updateOne({_id: req.params.id}, sauces).then(
+    () => {
+      res.status(201).json({
+        message: 'Thing updated successfully!'
+      });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+};
+
+exports.getOneSauces = (req, res, next) => {
+  Sauces.findOne({
+    _id: req.params.id
+  }).then(
+    (sauces) => {
+      res.status(200).json(sauces);
+    }
+  ).catch(
+    (error) => {
+      res.status(404).json({
+        error: error
+      });
+    }
+  );
+};
+
+
+exports.deleteSauces = (req, res, next) => {
+  Sauces.deleteOne({_id: req.params.id}).then(
+    () => {
+      res.status(200).json({
+        message: 'Deleted!'
+      });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+};
+
+exports.getAllSauces = (req, res, next) => {
+  Sauces.find().then(
+    (sauces) => {
+      res.status(200).json(sauces);
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+};
+
