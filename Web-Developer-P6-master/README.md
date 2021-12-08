@@ -9,7 +9,7 @@ Here are the dependancies you need to install:
 
 On Windows, these installations require to use PowerShell in administrator mode.
 
-Then, clone this repo, `run npm install`, and `run npm install --save-dev run-script-os`.
+Then, clone this repo, run "npm install" in the back-end, and "npm install --save-dev run-script-os" in the Web-Developer-P6-master folder.
 
 
 ## Usage ##
